@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table from "./ReactTable/Table";
 import tableColumns from "./TableColumns";
 import SubComponent from "./ReactTable/SubComponent";
+import ProgressBar from "@material-ui/core/LinearProgress";
 
 function App() {
   // const [error, setError] = React.useState(false);
@@ -26,7 +27,7 @@ function App() {
 
   return (
     <div>
-      <h1 style={{ textAlign: "center" }}>Products</h1>
+      <h1>Products list</h1>
       {!loading ? (
         <Table
           columns={columns}
@@ -34,7 +35,7 @@ function App() {
           renderRowSubComponent={renderRowSubComponent}
         />
       ) : (
-        <h1>loading ...</h1>
+        <ProgressBar />
       )}
     </div>
   );

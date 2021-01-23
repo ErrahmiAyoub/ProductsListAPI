@@ -15,7 +15,13 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/paper";
+
+import Pagging from "./Pagging";
 import { fuzzyTextFilterFn, GlobalFilter } from "./Filters";
+
+//icons
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
 function Table({ columns: userColumns, data, renderRowSubComponent }) {
   const filterTypes = React.useMemo(
@@ -75,6 +81,7 @@ function Table({ columns: userColumns, data, renderRowSubComponent }) {
       data,
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
+      initialState: { pageSize: 5 },
     },
     useFilters, // useFilters!
     useGlobalFilter,
@@ -93,18 +100,17 @@ function Table({ columns: userColumns, data, renderRowSubComponent }) {
   }, [preGlobalFilteredRows]);
 
   return (
-    <Paper style={{ margin: "1em", padding: "1em" }}>
-      <div style={{ display: "flex" }}>
-        <span style={{ marginRight: "10px" }}>Filter by category : </span>
-        <GlobalFilter
-          options={categoryFilter}
-          globalFilter={state.globalFilter}
-          setGlobalFilter={setGlobalFilter}
-        />
-      </div>
-      <TableContainer>
+    <Paper style={{ padding: "1em" }}>
+      {/* <span style={{ marginRight: "10px" }}>Filter by category : </span> */}
+      <GlobalFilter
+        options={categoryFilter}
+        globalFilter={state.globalFilter}
+        setGlobalFilter={setGlobalFilter}
+      />
+
+      <TableContainer style={{ marginTop: "1em" }}>
         <MaUTable stickyHeader {...getTableProps()}>
-          <TableHead>
+          <TableHead style={{ cursor: "pointer" }}>
             {headerGroups.map((headerGroup) => (
               <TableRow {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
@@ -118,11 +124,15 @@ function Table({ columns: userColumns, data, renderRowSubComponent }) {
                     >
                       {column.render("Header")}
                       <span>
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? " 🔽"
-                            : " 🔼"
-                          : ""}
+                        {column.isSorted ? (
+                          column.isSortedDesc ? (
+                            <ExpandLessIcon />
+                          ) : (
+                            <ExpandMoreIcon />
+                          )
+                        ) : (
+                          ""
+                        )}
                       </span>
                     </div>
                     <div>
@@ -174,59 +184,19 @@ function Table({ columns: userColumns, data, renderRowSubComponent }) {
           </TableBody>
         </MaUTable>
       </TableContainer>
-      <br />
       {/* <div>Showing the first 20 results of {page.length} rows</div> */}
-      <div
-        style={{
-          margin: "30px",
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {"<<"}
-        </button>{" "}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {"<"}
-        </button>{" "}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {">"}
-        </button>{" "}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {">>"}
-        </button>{" "}
-        <span>
-          Page{" "}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{" "}
-        </span>
-        <span>
-          | Go to page:{" "}
-          <input
-            type="number"
-            defaultValue={pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              gotoPage(page);
-            }}
-            style={{ width: "100px" }}
-          />
-        </span>{" "}
-        <select
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-          }}
-        >
-          {[5, 10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-      </div>
+      <Pagging
+        gotoPage={gotoPage}
+        previousPage={previousPage}
+        nextPage={nextPage}
+        canPreviousPage={canPreviousPage}
+        canNextPage={canNextPage}
+        pageCount={pageCount}
+        pageIndex={pageIndex}
+        pageOptions={pageOptions}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+      />
     </Paper>
   );
 }

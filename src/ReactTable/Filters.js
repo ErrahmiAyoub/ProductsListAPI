@@ -1,6 +1,8 @@
 import React from "react";
 import { matchSorter } from "match-sorter";
 import { useAsyncDebounce } from "react-table";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
 
 export function GlobalFilter({ options, globalFilter, setGlobalFilter }) {
   //const count = preGlobalFilteredRows.length;
@@ -10,20 +12,21 @@ export function GlobalFilter({ options, globalFilter, setGlobalFilter }) {
   }, 200);
 
   return (
-    <select
+    <Autocomplete
+      id="filter"
       value={value}
-      onChange={(e) => {
-        setValue(e.target.value);
-        onChange(e.target.value);
+      options={options}
+      size="small"
+      getOptionLabel={(option) => option}
+      style={{ width: 300 }}
+      renderInput={(params) => (
+        <TextField {...params} label="Filter by category" variant="outlined" />
+      )}
+      onChange={(e, v) => {
+        setValue(v);
+        onChange(v);
       }}
-    >
-      <option value="">All</option>
-      {options.map((option, i) => (
-        <option key={i} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
+    />
   );
 }
 export function fuzzyTextFilterFn(rows, id, filterValue) {

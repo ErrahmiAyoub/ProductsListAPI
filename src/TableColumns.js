@@ -1,4 +1,9 @@
 import React from "react";
+import RemoveIcon from "@material-ui/icons/Remove";
+import AddIcon from "@material-ui/icons/Add";
+import IconButton from "@material-ui/core/IconButton";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
+import StoreIcon from "@material-ui/icons/Store";
 
 export default function tableColumns() {
   return [
@@ -8,7 +13,7 @@ export default function tableColumns() {
       id: "expander", // It needs an ID
       Cell: ({ row }) => (
         <span {...row.getToggleRowExpandedProps()}>
-          {row.isExpanded ? "👇" : "👉"}
+          {row.isExpanded ? <RemoveIcon /> : <AddIcon />}
         </span>
       ),
     },
@@ -58,17 +63,21 @@ export default function tableColumns() {
           .replace("2020112", "20210114");
         return (
           <a href={a} target="_blank" rel="noopener noreferrer">
-            <button>DataSheet</button>
+            <IconButton aria-label="delete">
+              <AttachFileIcon fontSize="large" color="primary" />
+            </IconButton>
           </a>
         );
       },
     },
     {
-      Header: "Link",
+      Header: "Store",
       accessor: (d) => {
         return (
-          <a href={d.Link} target="_blank" rel="noopener noreferrer">
-            <button>Link</button>
+          <a href={d.link} target="_blank" rel="noopener noreferrer">
+            <IconButton aria-label="delete">
+              <StoreIcon fontSize="large" color="primary" />
+            </IconButton>
           </a>
         );
       },
