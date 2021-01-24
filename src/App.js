@@ -56,8 +56,12 @@ function App() {
       )}
 
       {error && (
-        <Alert style={{ marginTop: "40px" }} severity="error">
-          Fetch Error
+        <Alert style={{ marginTop: "40px" }} severity="info">
+          A fetch error is catched because of mixed content error the app is
+          deployed in HTTPS but the API use HTTP protocoele. As a solution the
+          content is loaded from an internal file containing the products data.
+          If you want to get the content from the API link please run the
+          application using HTTP protocole in the localhost for example.
         </Alert>
       )}
     </>
