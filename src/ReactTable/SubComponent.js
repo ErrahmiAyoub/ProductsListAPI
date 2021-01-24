@@ -5,12 +5,15 @@ import Grid from "@material-ui/core/Grid";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    position: "sticky",
+    left: "16px",
+    // background: "red",
     whiteSpace: "wrap",
     [theme.breakpoints.up("md")]: {
-      padding: "0 100px",
+      padding: "0 16px",
     },
-    [theme.breakpoints.up("md")]: {
-      padding: "0",
+    [theme.breakpoints.down("md")]: {
+      width: "75vw",
     },
   },
   paper: {
@@ -36,12 +39,12 @@ export default function SubComponent({ row }) {
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
-        <Grid sm={12} md={5}>
+        <Grid item sm={12} md={5}>
           <h2>Specifications</h2>
           <ul>{specification}</ul>
         </Grid>
 
-        <Grid sm={12} md={7}>
+        <Grid item sm={12} md={7}>
           <h2>Features</h2>
           <ul>{features}</ul>
         </Grid>
